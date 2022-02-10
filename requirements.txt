@@ -1,0 +1,3 @@
+folium
+geopy.Nominatim
+geopy.extra.rate_limiter.RateLimiter
