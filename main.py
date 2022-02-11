@@ -7,7 +7,6 @@ from geopy import Nominatim
 from geopy.extra.rate_limiter import RateLimiter
 
 
-
 def parcing():
     """
     Parces the arguments.
@@ -23,6 +22,13 @@ def parcing():
 def read_data_from_file(filename, year):
     """
     Reads a dataset and parces it, then returns the films of a given year.
+    >>> read_data_from_file('locator1.list', '2012')[:3]
+    [['"2012 Stanley Cup Finals" (2012) {Game 1 (#1.1)}', 'Prudential Center, \
+Newark, New Jersey, USA'], \
+['"2012 Stanley Cup Finals" (2012) {Game 3 (#1.3)}', 'Staples Center - 1111 S. \
+Figueroa Street, Downtown, \
+Los Angeles, California, USA'], ['"2012 UEFA European Football Championship" (2012)', \
+'National Stadium, Warsaw, Mazowieckie, Poland']]
     """
     file = open(filename, mode='r', encoding='utf-8', errors='ignore')
     data = file.readline()
@@ -49,6 +55,8 @@ def convert_data_to_coordinates(data_list):
     If location was found for the 1st time caches it.
     For every next time that location used cache is used to hasten the process.
     If location isn't found with original address, then it gets shorter to become less precise.
+    >>> convert_data_to_coordinates([['"Noble Soul" (2015)', 'Krasne, Lviv oblast, Ukraine']])
+    [['"Noble Soul" (2015)', 'Krasne, Lviv oblast, Ukraine', (49.9125099, 24.608186)]]
     """
     storage = {}
     for i in range(len(data_list)):
@@ -87,6 +95,10 @@ def get_closest_places(coordinate, list_of_coordinates):
     """
     Finds distance between 2 points on a sphere using haversine formula.
     Returns 10 closest places from dataset.
+    >>> get_closest_places((49.8397, 24.0297), [['"Noble Soul" (2015)', 'Krasne,\
+ Lviv oblast, Ukraine', (49.9125099, 24.608186)]])
+    [['"Noble Soul" (2015)', 'Krasne, Lviv oblast, Ukraine', (49.9125099, 24.608186),\
+ 3432.9469932841685]]
     """
     for i in range(len(list_of_coordinates)):
         list_of_coordinates[i].append(2*6371*math.asin(math.sqrt((math.sin((
@@ -113,7 +125,7 @@ def build_map(list_of_closest, coordinates):
     for i in range(len(list_of_closest)):
         featgr.add_child(folium.Marker(
             location=list_of_closest[i][-2], popup=folium.Popup(
-                list_of_closest[i][0].split('{')[0]), icon=folium.Icon(icon='video',
+                list_of_closest[i][0].split('{')[0]), icon=folium.Icon(icon='',
                                                                        color=colors[i])))
     featgr.add_child(folium.Marker(location=coordinates, popup='main location',
                                    icon=folium.Icon(icon='arrow-down', color='beige')))
@@ -138,6 +150,8 @@ def main():
 
 
 if __name__ == '__main__':
+    # import doctest
+    # print(doctest.testmod())
     main()
 
 # start=time.time()
