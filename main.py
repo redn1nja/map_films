@@ -125,7 +125,7 @@ def build_map(list_of_closest, coordinates):
     for i in range(len(list_of_closest)):
         featgr.add_child(folium.Marker(
             location=list_of_closest[i][-2], popup=folium.Popup(
-                list_of_closest[i][0].split('{')[0]), icon=folium.Icon(icon='',
+                list_of_closest[i][0].split('{')[0]), icon=folium.Icon(icon='film',
                                                                        color=colors[i])))
     featgr.add_child(folium.Marker(location=coordinates, popup='main location',
                                    icon=folium.Icon(icon='arrow-down', color='beige')))
